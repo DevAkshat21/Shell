@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
-  
+
   // Flush after every printf
   setbuf(stdout, NULL);
   // Captures the user's command in the "command" variable
