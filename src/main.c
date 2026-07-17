@@ -6,7 +6,9 @@ int main(int argc, char *argv[]) {
 
   // Flush after every printf
   setbuf(stdout, NULL);
-  while (1)
+  int i;
+  i = 1;
+  while (i == 1)
   {
   printf("$ ");
 
@@ -16,7 +18,9 @@ int main(int argc, char *argv[]) {
 
   // Remove the trailing newline
   command[strcspn(command, "\r\n")] = '\0';
-
+  if (strcmp(command,"exit") == 0){
+    i = 0;
+  }
   // Prints the "<command>: command not found" message
   printf("%s: command not found\r\n", command);
   }
