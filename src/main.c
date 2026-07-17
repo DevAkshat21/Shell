@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     i = 0;
   }
 
-  else if (strcmp(builtin,"echo ") == 0) {
+  else if (strcmp(builtin,"echo") == 0) {
     printf("%s\n", command+5);
   }
 
