@@ -22,7 +22,9 @@ int main(int argc, char *argv[]) {
     i = 0;
   }
   // Prints the "<command>: command not found" message
+  else{
   printf("%s: command not found\r\n", command);
+  }
   }
   
 
