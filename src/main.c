@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   command[strcspn(command, "\r\n")] = '\0';
 
   char *builtin = strtok(command," ");
-  char *arg = strtok(command,"");
+  char *arg = strtok(NULL,"");
 
   if (strcmp(builtin,"exit") == 0){
     i = 0;
@@ -62,9 +62,11 @@ int main(int argc, char *argv[]) {
   // }
 
   // Prints the "<command>: command not found" message
+
   else{
   printf("%s: command not found\r\n", command);
   }
+
   }
   
 
