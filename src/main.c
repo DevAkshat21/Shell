@@ -6,6 +6,8 @@ int main(int argc, char *argv[]) {
 
   // Flush after every printf
   setbuf(stdout, NULL);
+  while (1)
+  {
   printf("$ ");
 
   // Captures the user's command in the "command" variable
@@ -17,6 +19,9 @@ int main(int argc, char *argv[]) {
 
   // Prints the "<command>: command not found" message
   printf("%s: command not found\r\n", command);
+  }
+  
+
 
 
   return 0;
