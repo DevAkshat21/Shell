@@ -1,28 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
 #include <io.h>
+#define PATH_DELIMITER ";"
+#define DIR_SEPARATOR "\\"
+#define ACCESS _access
+#define ACCESS_MODE 0
+#else
+#include <unistd.h>
+#define PATH_DELIMITER ":"
+#define DIR_SEPARATOR "/"
+#define ACCESS access
+#define ACCESS_MODE X_OK
+#endif
+
 char *find_path(char *arg) {
     static char full_path[1024];
 
     char path_copy[4096];
     strcpy(path_copy, getenv("PATH"));
 
-    // Windows PATH is separated by ';'
-    char *dir = strtok(path_copy, ";");
+    char *dir = strtok(path_copy, PATH_DELIMITER);
 
     while (dir != NULL) {
 
         strcpy(full_path, dir);
-        strcat(full_path, "\\");
+        strcat(full_path, DIR_SEPARATOR);
         strcat(full_path, arg);
 
-        // Does this file exist?
-        if (_access(full_path, 0) == 0) {
+        if (ACCESS(full_path, ACCESS_MODE) == 0) {
             return full_path;
         }
 
-        dir = strtok(NULL, ";");
+        dir = strtok(NULL, PATH_DELIMITER);
     }
 
     return NULL;
@@ -32,14 +44,14 @@ int main(int argc, char *argv[]) {
 
     setbuf(stdout, NULL);
 
-    int i = 1;
-
-    while (i == 1) {
+    while (1) {
 
         printf("$ ");
 
         char command[1024];
-        fgets(command, sizeof(command), stdin);
+
+        if (fgets(command, sizeof(command), stdin) == NULL)
+            break;
 
         command[strcspn(command, "\r\n")] = '\0';
 
@@ -51,7 +63,7 @@ int main(int argc, char *argv[]) {
 
         // Exit
         if (strcmp(builtin, "exit") == 0) {
-            i = 0;
+            break;
         }
 
         // Echo
@@ -62,20 +74,25 @@ int main(int argc, char *argv[]) {
         // Type
         else if (strcmp(builtin, "type") == 0) {
 
-            if (!strcmp(arg, "type") ||
-                !strcmp(arg, "echo") ||
-                !strcmp(arg, "exit")) {
+            if (arg == NULL) {
+                printf("type: missing argument\n");
+            }
+
+            else if (!strcmp(arg, "exit") ||
+                     !strcmp(arg, "echo") ||
+                     !strcmp(arg, "type")) {
 
                 printf("%s is a shell builtin\n", arg);
             }
-            else {
-            char *path = find_path(arg);
 
-            if (path != NULL) {
-                printf("%s is %s\n", arg, path);
-            } else {
-                printf("%s: not found\n", arg);
-                }
+            else {
+
+                char *path = find_path(arg);
+
+                if (path != NULL)
+                    printf("%s is %s\n", arg, path);
+                else
+                    printf("%s: not found\n", arg);
             }
         }
 
