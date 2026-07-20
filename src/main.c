@@ -81,6 +81,10 @@ int main(int argc, char *argv[]) {
             argv[argc] = NULL;
             char *builtin = argv[0];
 
+            if (builtin == NULL) {
+                continue;
+}
+
         // Exit
 
         if (strcmp(builtin, "exit") == 0) {
@@ -101,6 +105,7 @@ int main(int argc, char *argv[]) {
                 i++;
             }
             printf("\n");
+            continue;
         }
 
         // Type
@@ -128,6 +133,7 @@ int main(int argc, char *argv[]) {
                 else
                     printf("%s: not found\n", argv[i]);
             }
+            continue;
 
 
         }
