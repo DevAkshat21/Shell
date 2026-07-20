@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #ifdef _WIN32
 #include <io.h>
@@ -15,6 +18,8 @@
 #define ACCESS access
 #define ACCESS_MODE X_OK
 #endif
+
+// Find the full path of a command in the PATH environment variable
 
 char *find_path(char *arg) {
     static char full_path[1024];
@@ -40,6 +45,11 @@ char *find_path(char *arg) {
     return NULL;
 }
 
+
+
+
+//main function 
+
 int main(int argc, char *argv[]) {
 
     setbuf(stdout, NULL);
@@ -50,49 +60,98 @@ int main(int argc, char *argv[]) {
 
         char command[1024];
 
+    
+
         if (fgets(command, sizeof(command), stdin) == NULL)
-            break;
+        break;
 
         command[strcspn(command, "\r\n")] = '\0';
 
-        char *builtin = strtok(command, " ");
-        char *arg = strtok(NULL, "");
+            char *argv[100];
+            int argc = 0;
 
-        if (builtin == NULL)
-            continue;
+            char *token = strtok(command, " ");
+
+            while (token != NULL) {
+                argv[argc] = token;
+                argc++;
+
+                token = strtok(NULL, " ");
+            }
+            argv[argc] = NULL;
+            char *builtin = argv[0];
 
         // Exit
+
         if (strcmp(builtin, "exit") == 0) {
             break;
         }
 
         // Echo
+
         else if (strcmp(builtin, "echo") == 0) {
-            printf("%s\n", arg ? arg : "");
+            int i = 1;
+            while (argv[i] != NULL){
+                if (i>1){
+                     printf(" %s",argv[i]);
+                }
+                else{
+                    printf("%s",argv[i]);
+                }
+                i++;
+            }
+            printf("\n");
         }
 
         // Type
+
         else if (strcmp(builtin, "type") == 0) {
 
-            if (arg == NULL) {
+            int i = 1 ;
+            if (argv[i] == NULL) {
                 printf("type: missing argument\n");
             }
 
-            else if (!strcmp(arg, "exit") ||
-                     !strcmp(arg, "echo") ||
-                     !strcmp(arg, "type")) {
+            else if (!strcmp(argv[i], "exit") ||
+                     !strcmp(argv[i], "echo") ||
+                     !strcmp(argv[i], "type")) {
 
-                printf("%s is a shell builtin\n", arg);
+                printf("%s is a shell builtin\n", argv[i]);
             }
 
             else {
 
-                char *path = find_path(arg);
+                char *path = find_path(argv[i]);
 
                 if (path != NULL)
-                    printf("%s is %s\n", arg, path);
+                    printf("%s is %s\n", argv[i], path);
                 else
-                    printf("%s: not found\n", arg);
+                    printf("%s: not found\n", argv[i]);
+            }
+
+
+        }
+
+        if (builtin == NULL){
+            continue;
+        }
+
+        // Execute external command
+
+        char *path = find_path(builtin);
+
+        if (path != NULL) {
+            pid_t pid = fork();
+
+            if (pid == 0) {
+                execv(path, argv);
+                perror("execv");
+                exit(EXIT_FAILURE);
+            } else if (pid > 0) {
+                wait(NULL);
+            } else {
+                perror("fork");
+                exit(EXIT_FAILURE);
             }
         }
 
