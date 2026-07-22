@@ -185,10 +185,11 @@ int main(int argc, char *argv[]) {
             if(chdir(argv[1])!=0){
                 printf("cd: %s: %s\n",argv[1],strerror(errno));
             }
-        }
             else{
                 continue;
             }
+        }
+
 
         // Unknown command
         else {
