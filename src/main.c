@@ -122,6 +122,7 @@ int main(int argc, char *argv[]) {
             else if (!strcmp(argv[i], "exit") ||
                      !strcmp(argv[i], "echo") ||
                      !strcmp(argv[i], "type") ||
+                     !strcmp(argv[i], "cd") ||
                      !strcmp(argv[i],"pwd")) {
 
                 printf("%s is a shell builtin\n", argv[i]);
@@ -175,6 +176,14 @@ int main(int argc, char *argv[]) {
             } else {
                 perror("fork");
                 exit(EXIT_FAILURE);
+            }
+        }
+
+        //cd 
+
+        else if (strcmp(builtin,"cd")==0){
+            if(chdir(argv[1])!=0){
+                perror("cd");
             }
         }
 
