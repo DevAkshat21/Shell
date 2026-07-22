@@ -121,7 +121,8 @@ int main(int argc, char *argv[]) {
 
             else if (!strcmp(argv[i], "exit") ||
                      !strcmp(argv[i], "echo") ||
-                     !strcmp(argv[i], "type")) {
+                     !strcmp(argv[i], "type") ||
+                     !strcmp(argv[i],"pwd")) {
 
                 printf("%s is a shell builtin\n", argv[i]);
             }
