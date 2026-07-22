@@ -142,6 +142,19 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
+        // Pwd 
+
+        else if(strcmp(builtin,"pwd")==0){
+            char cwd[1024];
+            if (getcwd(cwd,sizeof(cwd))!= NULL){
+                printf("%s\n",cwd);
+            }
+            else{
+                printf("Directory not found")
+            }
+        }
+
+
         // Execute external command
 
         char *path = find_path(builtin);
