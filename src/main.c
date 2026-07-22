@@ -183,9 +183,12 @@ int main(int argc, char *argv[]) {
 
         else if (strcmp(builtin,"cd")==0){
             if(chdir(argv[1])!=0){
-                perror("cd");
+                printf("cd: %s: %s\n",argv[1],strerror(errno));
             }
         }
+            else{
+                continue;
+            }
 
         // Unknown command
         else {
