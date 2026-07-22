@@ -155,6 +155,7 @@ int main(int argc, char *argv[]) {
             else{
                 perror("pwd");
             }
+            continue;
         }
 
 
