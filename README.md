@@ -1,34 +1,109 @@
-[![progress-banner](https://backend.codecrafters.io/progress/shell/50a26d72-09dc-4564-83bd-0a382ceb2d68)](https://app.codecrafters.io/users/DevAkshat21?r=2qF)
+# Mini Shell in C
 
-This is a starting point for C solutions to the
-["Build Your Own Shell" Challenge](https://app.codecrafters.io/courses/shell/overview).
+A simple Unix shell written in C as part of my systems programming journey.
 
-In this challenge, you'll build your own POSIX compliant shell that's capable of
-interpreting shell commands, running external programs and builtin commands like
-cd, pwd, echo and more. Along the way, you'll learn about shell command parsing,
-REPLs, builtin commands, and more.
+This project is being built from scratch while learning C through *The C Programming Language* (Kernighan & Ritchie). The goal is not just to make a working shell, but to understand how operating systems execute programs, manage processes, and interact with the filesystem.
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+---
 
-# Passing the first stage
+## Features
 
-The entry point for your `shell` implementation is in `src/main.c`. Study and
-uncomment the relevant code, then run the command below to execute the tests on
-our servers:
+### Built-in Commands
+- `echo`
+- `type`
+- `exit`
 
-```sh
-codecrafters submit
+### External Commands
+- Search executables using the `PATH` environment variable
+- Execute programs using `fork()` and `execv()`
+- Wait for child processes using `waitpid()`
+
+---
+
+## Concepts Learned
+
+This project helped me understand:
+
+- String tokenization using `strtok()`
+- Parsing command-line arguments (`argv`)
+- Environment variables (`getenv`)
+- Searching the `PATH`
+- Executable permissions using `access()`
+- Process creation using `fork()`
+- Program execution using `execv()`
+- Parent-child synchronization using `waitpid()`
+
+---
+
+## Technologies
+
+- C
+- GCC
+- Linux / WSL
+- POSIX System Calls
+
+---
+
+## Building
+
+Compile the project:
+
+```bash
+gcc main.c -o shell
 ```
 
-Time to move on to the next stage!
+Run:
 
-# Stage 2 & beyond
+```bash
+./shell
+```
 
-Note: This section is for stages 2 and beyond.
+---
 
-1. Ensure you have `cmake` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `src/main.c`.
-1. Run `codecrafters submit` to submit your solution to CodeCrafters. Test
-   output will be streamed to your terminal.
+## Current Status
+
+- [x] Command parsing
+- [x] Built-in commands
+- [x] PATH lookup
+- [x] External command execution
+- [x] Process creation (`fork`)
+- [x] Program execution (`execv`)
+- [x] Parent waits for child
+
+---
+
+## Roadmap
+
+- [ ] Input/Output Redirection (`>`, `<`)
+- [ ] Pipes (`|`)
+- [ ] Background Processes (`&`)
+- [ ] Command History
+- [ ] Signal Handling
+- [ ] Environment Variable Expansion
+- [ ] Job Control
+
+---
+
+## Why I'm Building This
+
+I'm currently learning systems programming and low-level software development.
+
+This shell is one of several projects I'm building to understand how Unix systems work internally before moving on to larger projects like:
+
+- HTTP Server in C
+- Memory Allocator
+- Mini Operating System
+- Networking Projects
+- Embedded Systems Development
+
+---
+
+## References
+
+- *The C Programming Language* — Brian W. Kernighan & Dennis M. Ritchie
+- POSIX Manual Pages
+- CodeCrafters Shell Challenge
+
+---
+
+**Author:** Akshat Singh
