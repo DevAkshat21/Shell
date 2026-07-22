@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
+
 
 #ifdef _WIN32
 #include <io.h>
@@ -150,7 +152,7 @@ int main(int argc, char *argv[]) {
                 printf("%s\n",cwd);
             }
             else{
-                printf("Directory not found")
+                perror("pwd");
             }
         }
 
