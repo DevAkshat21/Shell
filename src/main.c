@@ -182,12 +182,15 @@ int main(int argc, char *argv[]) {
         //cd 
 
         else if (strcmp(builtin,"cd")==0){
-            if(chdir(argv[1])!=0){
+
+            if(strcmp(argv[1],"~")==0){
+                chdir((getenv("HOME")));
+            }            
+            
+            else if(chdir(argv[1])!=0){
                 printf("cd: %s: %s\n",argv[1],strerror(errno));
             }
-            else if(strcmp(argv[1],"~")==0){
-                chdir((getenv("HOME")));
-            }
+
             else{
                 continue;
             }
