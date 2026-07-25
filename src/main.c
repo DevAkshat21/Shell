@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <stdbool.h>
 
 
 #ifdef _WIN32
@@ -69,23 +70,62 @@ int main(int argc, char *argv[]) {
 
         command[strcspn(command, "\r\n")] = '\0';
 
-            char *argv[100];
-            int argc = 0;
+        char current[1024];
+        int current_len = 0;
 
-            char *token = strtok(command, " ");
+        bool in_quote = false;
 
-            while (token != NULL) {
-                argv[argc] = token;
-                argc++;
+        for (int i = 0; command[i] != '\0'; i++) {
+            char c = command[i];
 
-                token = strtok(NULL, " ");
+            if (c == '\'') {
+                in_quote = !in_quote;
+
             }
-            argv[argc] = NULL;
-            char *builtin = argv[0];
+            else if (c == ' ' && !in_quote) {
+                current[current_len] = '\0';
+                argv[argc] = strdup(current);
+                argc++;
+                current_len = 0;
+            }
+            else {
+                current[current_len] = c;
+                current_len++;
+            }
+        }
 
-            if (builtin == NULL) {
-                continue;
-}
+        if (current_len > 0) {
+            current[current_len] = '\0';
+            argv[argc] = strdup(current);
+            argc++;
+        }
+
+argv[argc] = NULL;
+char *builtin = argv[0];
+d
+        
+// Old tokenizer 
+
+//             char *argv[100];
+//             int argc = 0;       
+
+//             char *token = strtok(command, " ");
+
+//             while (token != NULL) {
+//                 argv[argc] = token;
+//                 argc++;
+
+//                 token = strtok(NULL, " ");
+//             }
+//             argv[argc] = NULL;
+//             char *builtin = argv[0];
+
+//             if (builtin == NULL) {
+//                 continue;
+// }
+
+
+
 
         // Exit
 
