@@ -88,6 +88,7 @@ int main(int argc, char *argv[]) {
                 argc++;
                 current_len = 0;
             }
+
             else {
                 current[current_len] = c;
                 current_len++;
@@ -102,7 +103,6 @@ int main(int argc, char *argv[]) {
 
 argv[argc] = NULL;
 char *builtin = argv[0];
-d
         
 // Old tokenizer 
 
