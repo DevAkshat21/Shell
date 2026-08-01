@@ -22,7 +22,7 @@
 #define ACCESS_MODE X_OK
 #endif
 
-// Find the full path of a command in the PATH environment variable
+// Function to find the full path of a command in the PATH environment variable
 
 char *find_path(char *arg) {
     static char full_path[1024];
@@ -60,6 +60,9 @@ int main(int argc, char *argv[]) {
     while (1) {
 
         printf("$ ");
+        int argc = 0;
+        char *argv[100];
+
 
         char command[1024];
 
@@ -77,16 +80,19 @@ int main(int argc, char *argv[]) {
 
         for (int i = 0; command[i] != '\0'; i++) {
             char c = command[i];
-
+            
             if (c == '\'') {
                 in_quote = !in_quote;
 
             }
-            else if (c == ' ' && !in_quote) {
+            else if (c == ' ' && !in_quote && current_len > 0) {
                 current[current_len] = '\0';
                 argv[argc] = strdup(current);
                 argc++;
                 current_len = 0;
+            }
+            else if (c == ' ' && !in_quote && current_len == 0) {
+                continue;
             }
 
             else {
@@ -128,7 +134,6 @@ char *builtin = argv[0];
 
 
         // Exit
-
         if (strcmp(builtin, "exit") == 0) {
             break;
         }
@@ -237,11 +242,15 @@ char *builtin = argv[0];
         }
 
 
-
         // Unknown command
         else {
             printf("%s: command not found\n", builtin);
         }
+
+        for (int i = 0; i < argc; i++) {
+           free(argv[i]);
+        }
+
     }
 
     return 0;
